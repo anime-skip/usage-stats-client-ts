@@ -101,9 +101,9 @@ export function createUsageStatsClient(config: UsageStatsClientConfig): UsageSta
 
   return {
     // @ts-expect-error: Overriding is bad
-    saveEvent(event, additionalDetails) {
-      const timestamp = new Date().toISOString();
-      return Promise.resolve().then(async () => {
+    async saveEvent(event, additionalDetails) {
+      try {
+        const timestamp = new Date().toISOString();
         let userId = await config.getUserId();
         if (!userId) {
           userId = generateGuestId();
@@ -119,7 +119,9 @@ export function createUsageStatsClient(config: UsageStatsClientConfig): UsageSta
           browser: config.browser,
           additionalDetails,
         });
-      });
+      } catch (err) {
+        config.log('Failed to send event:', err);
+      }
     },
   };
 }
