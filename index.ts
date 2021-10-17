@@ -36,7 +36,7 @@ export interface UsageStatsClientConfig {
 }
 
 export interface UsageStatsClient {
-  saveEvent(event: string, additionalDetails: Record<string, unknown>): Promise<void>;
+  saveEvent(event: string, additionalDetails?: Record<string, unknown>): Promise<void>;
 }
 
 function generateGuestId(): string {
