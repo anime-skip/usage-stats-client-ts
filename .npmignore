@@ -1,0 +1,6 @@
+/.vscode
+/src
+/.github
+.prettierrc
+tsconfig.json
+*.log

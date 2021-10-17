@@ -1,12 +1,16 @@
 {
   "name": "@anime-skip/usage-stats-client",
   "version": "1.0.0",
-  "author": {
-    "email": "aaron@anime-skip.com",
-    "name": "Aaron Klinker"
-  },
+  "description": "API client to report usage stats",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": "https://github.com/anime-skip/usage-stats-client-ts",
+  "author": "Aaron Klinker <aaronklinker1@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
     "compile": "tsc --noEmit",
     "build": "tsc",
