@@ -100,6 +100,7 @@ export function createUsageStatsClient(config: UsageStatsClientConfig): UsageSta
   }
 
   return {
+    // @ts-expect-error: Overriding is bad
     saveEvent(event, additionalDetails) {
       const timestamp = new Date().toISOString();
       return Promise.resolve().then(async () => {
