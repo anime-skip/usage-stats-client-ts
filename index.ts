@@ -1,6 +1,21 @@
 import axios from 'axios';
 import * as uuid from 'uuid';
 
+// Type Utils
+
+// https://www.piotrl.net/typescript-condition-subset-types/
+type FilterFlags<Base, Condition> = {
+  [Key in keyof Base]: Base[Key] extends Condition ? Key : never;
+};
+type AllowedNames<Base, Condition> = FilterFlags<Base, Condition>[keyof Base];
+
+type RevFilterFlags<Base, Condition> = {
+  [Key in keyof Base]: Base[Key] extends Condition ? never : Key;
+};
+type RevAllowedNames<Base, Condition> = RevFilterFlags<Base, Condition>[keyof Base];
+
+// Types
+
 export type StatsSource = 'api' | 'browser';
 
 export interface UsageStatsClientConfig {
@@ -35,13 +50,45 @@ export interface UsageStatsClientConfig {
   log(...args: any[]): void;
 }
 
-export interface UsageStatsClient {
-  saveEvent(event: string, additionalDetails?: Record<string, unknown>): Promise<void>;
+/**
+ * A set of key value pairs where the key is the event and the value is the additional details. When
+ * the additional details are undefined, that mean no additional details should be passed
+ */
+export interface EventDetailsMap {
+  login: undefined;
+  login_refresh: undefined;
+  logout: undefined;
+  forced_logout: undefined;
+  player_injected: undefined;
+  episode_started: { episodeDuration: number };
+  episode_finished: { episodeDuration: number };
+  play: { atTime: number };
+  pause: { atTime: number };
+  skipped_timestamp: { typeId: string; fromTime: number; toTime: number; skippedDuration: number };
+  opened_popup: undefined;
+  opened_all_settings: undefined;
+  used_keyboard_shortcut: { keyCombo: string; operation: string };
+  started_creating_timestamp: { atTime: number };
 }
+
+export type EventsWithoutDetails = RevAllowedNames<EventDetailsMap, object>;
+export type EventsWithDetails = AllowedNames<EventDetailsMap, object>;
+
+export interface UsageStatsClient {
+  saveEvent(event: EventsWithoutDetails): Promise<void>;
+  saveEvent<TEvent extends EventsWithDetails>(
+    event: TEvent,
+    additionalDetails: EventDetailsMap[TEvent],
+  ): Promise<void>;
+}
+
+// Utils
 
 function generateGuestId(): string {
   return `guest-${uuid.v4()}`;
 }
+
+// Client
 
 export function createUsageStatsClient(config: UsageStatsClientConfig): UsageStatsClient {
   async function postEvent(event: any): Promise<void> {
