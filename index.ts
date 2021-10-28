@@ -55,6 +55,8 @@ export interface UsageStatsClientConfig {
  * the additional details are undefined, that mean no additional details should be passed
  */
 export interface EventDetailsMap {
+  extension_installed: undefined;
+  extension_uninstalled: undefined;
   login: undefined;
   login_refresh: undefined;
   logout: undefined;
