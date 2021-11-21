@@ -62,7 +62,7 @@ export interface EventDetailsMap {
   logout: undefined;
   forced_logout: undefined;
   player_injected: undefined;
-  episode_started: { episodeDuration: number };
+  episode_started: { episodeDuration: number; service: string };
   episode_finished: { episodeDuration: number };
   play: { atTime: number };
   pause: { atTime: number };
