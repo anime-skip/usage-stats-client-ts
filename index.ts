@@ -71,7 +71,9 @@ export interface EventDetailsMap {
   opened_all_settings: undefined;
   used_keyboard_shortcut: { keyCombo: string; operation: string };
   started_creating_timestamp: { atTime: number };
-  review_request_popup: undefined;
+  prompt_store_review: undefined;
+  prompt_store_review_rate: undefined;
+  prompt_store_review_dont_ask_again: undefined;
 }
 
 export type EventsWithoutDetails = RevAllowedNames<EventDetailsMap, object>;
