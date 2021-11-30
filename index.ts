@@ -56,6 +56,7 @@ export interface UsageStatsClientConfig {
  */
 export interface EventDetailsMap {
   extension_installed: undefined;
+  extension_updated: { fromVersion: string; toVersion: string };
   extension_uninstalled: undefined;
   login: undefined;
   login_refresh: undefined;
