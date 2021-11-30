@@ -61,7 +61,11 @@ export interface EventDetailsMap {
   login: undefined;
   login_refresh: undefined;
   logout: undefined;
-  forced_logout: { tokenExpiredAt: number; refreshTokenExpiredAt: number };
+  forced_logout: {
+    tokenExpiredAt?: number;
+    refreshTokenExpiredAt?: number;
+    apiError?: string;
+  };
   player_injected: undefined;
   episode_started: { episodeDuration: number; service: string };
   episode_finished: { episodeDuration: number };
