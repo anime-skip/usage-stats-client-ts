@@ -48,6 +48,10 @@ export interface UsageStatsClientConfig {
    * Custom log function that takes in args like `console.log`
    */
   log(...args: any[]): void;
+  /**
+   * A function that prevents metrics from being reported when it returns false.
+   */
+  canSendMetrics?(): boolean | Promise<boolean>;
 }
 
 /**
@@ -113,6 +117,9 @@ export function createUsageStatsClient(config: UsageStatsClientConfig): UsageSta
     // @ts-expect-error: Overriding is bad
     async saveEvent(event, additionalDetails) {
       try {
+        const canSendMetrics = await config.canSendMetrics?.();
+        if (canSendMetrics === false) return;
+
         const timestamp = new Date().toISOString();
         let userId = await config.getUserId();
         if (!userId) {
