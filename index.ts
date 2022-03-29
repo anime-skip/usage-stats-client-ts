@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as uuid from 'uuid';
 
 // Type Utils
@@ -107,7 +106,12 @@ function generateGuestId(): string {
 export function createUsageStatsClient(config: UsageStatsClientConfig): UsageStatsClient {
   async function postEvent(event: any): Promise<void> {
     if (config.send) {
-      await axios.post('https://usage-stats.anime-skip.com/events', event);
+      await fetch('https://usage-stats.anime-skip.com/events', {
+        body: JSON.stringify(event),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
     } else {
       config.log('Reported event:', event);
     }
