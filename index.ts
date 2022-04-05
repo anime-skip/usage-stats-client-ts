@@ -107,6 +107,7 @@ export function createUsageStatsClient(config: UsageStatsClientConfig): UsageSta
   async function postEvent(event: any): Promise<void> {
     if (config.send) {
       await fetch('https://usage-stats.anime-skip.com/events', {
+        method: 'POST',
         body: JSON.stringify(event),
         headers: {
           'Content-Type': 'application/json',
