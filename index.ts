@@ -19,11 +19,6 @@ export type StatsSource = 'api' | 'browser';
 
 export interface UsageStatsClientConfig {
   /**
-   * When true, the requests are actually made to the production api. When false, they just get
-   * logged
-   */
-  send: boolean;
-  /**
    * The name of the app stats will be collected for
    */
   app: string;
@@ -105,7 +100,9 @@ function generateGuestId(): string {
 
 export function createUsageStatsClient(config: UsageStatsClientConfig): UsageStatsClient {
   async function postEvent(event: any): Promise<void> {
-    if (config.send) {
+    const canSendMetrics = await config.canSendMetrics?.();
+    config.log('Reported event:', { event, canSendMetrics });
+    if (canSendMetrics) {
       await fetch('https://usage-stats.anime-skip.com/events', {
         method: 'POST',
         body: JSON.stringify(event),
@@ -115,8 +112,6 @@ export function createUsageStatsClient(config: UsageStatsClientConfig): UsageSta
       }).catch(err => {
         config.log('Fetch failed:', err);
       });
-    } else {
-      config.log('Reported event:', event);
     }
   }
 
@@ -124,9 +119,6 @@ export function createUsageStatsClient(config: UsageStatsClientConfig): UsageSta
     // @ts-expect-error: Overriding is bad
     async saveEvent(event, additionalDetails) {
       try {
-        const canSendMetrics = await config.canSendMetrics?.();
-        if (canSendMetrics === false) return;
-
         const timestamp = new Date().toISOString();
         let userId = await config.getUserId();
         if (!userId) {
