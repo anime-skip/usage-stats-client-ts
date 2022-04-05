@@ -112,6 +112,8 @@ export function createUsageStatsClient(config: UsageStatsClientConfig): UsageSta
         headers: {
           'Content-Type': 'application/json',
         },
+      }).catch(err => {
+        config.log('Fetch failed:', err);
       });
     } else {
       config.log('Reported event:', event);
