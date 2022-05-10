@@ -8,9 +8,6 @@
   "author": "Aaron Klinker <aaronklinker1@gmail.com>",
   "license": "MIT",
   "private": false,
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "scripts": {
     "compile": "tsc --noEmit",
     "build": "tsc",
