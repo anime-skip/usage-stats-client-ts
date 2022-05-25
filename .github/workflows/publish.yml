@@ -7,22 +7,19 @@ jobs:
     name: Publish
     runs-on: ubuntu-20.04
     steps:
-      - name: Install Node 14
-        uses: actions/setup-node@v1
-        with:
-          node-version: '14.x'
-
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      - name: Install pnpm
-        run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
-
-      - name: Cache .pnpm-store
-        uses: actions/cache@v1
+      - uses: pnpm/action-setup@v2.0.1
+        name: Install PNPM
         with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node14-${{ hashFiles('**/pnpm-lock.yaml') }}
+          version: 7.0.0
+
+      - name: Install Node 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+          cache: 'pnpm'
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -40,13 +37,11 @@ jobs:
           github-token: ${{ secrets.github_token }}
           output-file: 'false'
 
-      - name: Publish to GitHub Packages
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-          yarn publish --non-interactive
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
+      - uses: JS-DevTools/npm-publish@v1
+        name: Publish to NPM
+        with:
+          package: lib/package.json
+          token: ${{ secrets.NPM_AUTH_TOKEN }}
 
       - name: Create Release
         uses: actions/create-release@v1
