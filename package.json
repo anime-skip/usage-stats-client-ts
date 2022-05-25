@@ -1,6 +1,6 @@
 {
   "name": "@anime-skip/usage-stats-client",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "API client to report usage stats",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
