@@ -8,6 +8,10 @@
   "author": "Aaron Klinker <aaronklinker1@gmail.com>",
   "license": "MIT",
   "private": false,
+  "engines": {
+    "node": ">=16",
+    "pnpm": ">=7"
+  },
   "scripts": {
     "compile": "tsc --noEmit",
     "build": "tsc",
